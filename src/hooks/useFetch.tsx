@@ -1,6 +1,9 @@
 import Papa from 'papaparse';
+import { RowData } from '../../public/data/types';
 
-type Callback = (data:any) => void;
+
+
+type Callback = (data: RowData[]) => void;
 
 const useFetch = () => {
 
@@ -23,10 +26,11 @@ const useFetch = () => {
         const csvString = decoder.decode(result.value!);
         const { data } = Papa.parse(csvString, {
             header: true,
-            dynamicTyping: true
+            dynamicTyping: true,
+            skipEmptyLines: true,
         })
         const sanitizedData = sanitizeColumns(data);
-        callback(sanitizedData);
+        callback(sanitizedData as RowData[]);
     }
 
     return { fetchCsvData }
