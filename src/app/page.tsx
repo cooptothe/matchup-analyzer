@@ -50,7 +50,7 @@ export default function Page() {
     setVideoLink(matchingVideo);
   };
 
-  console.log(data);
+  console.log(batters);
 
   return (
     <div style={{ display: 'flex', padding: '1rem' }}>
