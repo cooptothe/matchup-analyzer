@@ -1,7 +1,7 @@
 export type RowData = {
-    BATTER_ID: string;
+    BATTER_ID: number;
     BATTER: string;
-    PITCHER_ID: string;
+    PITCHER_ID: number;
     PITCHER: string;
     GAME_DATE: string;
     LAUNCH_ANGLE: number;
