@@ -96,7 +96,7 @@ export default function Page() {
                   <div>
                     <a href={videoLink} target="_blank" rel="noopener noreferrer">Watch Video</a>
                     <br />
-                    <video width="400" controls>
+                    <video key={videoLink} width="400" controls>
                       <source src={videoLink} type="video/mp4" />
                       Your browser does not support the video tag.
                     </video>
