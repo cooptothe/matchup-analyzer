@@ -24,6 +24,14 @@ export default function Page() {
     });
   }, []);
 
+  // Format names to "First Last" 
+  const formatName = (name: string) => {
+    if (!name.includes(',')) return name;
+    const [last, first] = name.split(',').map(s => s.trim());
+    return `${first} ${last}`;
+  };
+  
+
   const handleBatterClick = (batter: string) => {
     setSelectedBatter(batter);
     setSelectedPitcher(null);
@@ -74,7 +82,7 @@ export default function Page() {
       <div style={{ width: '80%' }}>
         {selectedBatter && (
           <>
-            <h2>{selectedBatter}</h2>
+            <h2>{formatName(selectedBatter)}</h2>
             <label>Select Pitcher:</label>
             <select onChange={(e) => handlePitcherSelect(e.target.value)} value={selectedPitcher || ''}>
               <option value="" disabled>Select a pitcher</option>
@@ -85,7 +93,7 @@ export default function Page() {
                 if (!pitcherId) {
                   return null; // Skip if no unique ID found
               } return (
-                <option key={pitcherId} value={p}>{p}</option>
+                <option key={pitcherId} value={p}>{formatName(p)}</option>
               )})}
             </select>
 
