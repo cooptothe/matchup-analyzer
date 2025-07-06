@@ -2,7 +2,7 @@
 
 An interactive baseball web app that visualizes batter vs. pitcher outcomes using historical MLB data.
 
-Built with **Next.js (TypeScript)** and **Tailwind CSS**.
+Built with **Next.js (TypeScript)**, **Tailwind CSS**,  and **PapaParse** for CSV parsing.
 
 ---
 
@@ -26,6 +26,30 @@ Built with **Next.js (TypeScript)** and **Tailwind CSS**.
 | Vercel          | Deployment & Hosting                |
 
 ---
+## 🚀 Getting Started
+
+### 1. Clone the Project
+
+```bash
+git clone https://github.com/your-username/matchup-analyzer.git
+cd matchup-analyzer
+```
+
+### 2. Add CSV File
+Place your dataset in:
+/public/data/BattedBallData.csv
+
+### 3. Install Dependencies
+```bash
+npm install
+```
+
+### 4. Run the Dev Server
+```bash
+npm run dev
+```
+Then open your browser to:
+http://localhost:3000
 
 ## 🚀 Live Demo
 
