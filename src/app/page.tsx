@@ -23,7 +23,7 @@ export default function Page() {
   }, []);
 
   const formatName = (name: string) => {
-    if (!name.includes(',')) return name; // fallback for already formatted names
+    if (!name.includes(',')) return name;
     const [last, first] = name.split(',').map(s => s.trim());
     return `${first} ${last}`;
   };
@@ -59,13 +59,19 @@ export default function Page() {
   };
 
   return (
-
-    <div className="flex flex-col md:flex-row h-screen bg-gray-200">
+    <>
+      <h1 className="text-3xl font-bold text-center p-1 bg-blue-950 text-white">
+        Matchup Analyzer
+      </h1>
+      <p className="text-center text-gray-50 bg-blue-950 p-2">
+        Generate most likely outcome of selected matchup
+      </p>
+    <div className="flex flex-col md:flex-row h-screen bg-gray-200 p-4">
       {/* Left panel: Batters */}
       <div className="w-1/4 bg-gray-100 border-r border-gray-300 p-2 overflow-y-scroll">
         <h2 className="text-lg font-semibold mb-2">Batters</h2>
         <p className="text-sm text-gray-600 mb-6">Select a batter to see matchup details</p>
-        <div className="mb-4">
+        <div className="mb-4 bg-gray-200 shadow-sm">
           <input
             type="text"
             placeholder="Search..."
@@ -114,7 +120,7 @@ export default function Page() {
             <select
               onChange={(e) => handlePitcherSelect(e.target.value)}
               value={selectedPitcher || ''}
-              className="mb-4 p-2 border border-gray-900 rounded w-full"
+              className="mb-4 p-2 border bg-white border-gray-900 rounded w-full"
             >
               <option value="" disabled>Select a pitcher</option>
               {pitchers.map(p => {
@@ -161,5 +167,6 @@ export default function Page() {
         )}
       </div>
     </div>
+    </>
   );
 }
