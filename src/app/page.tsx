@@ -58,6 +58,8 @@ export default function Page() {
     setVideoLink(matchingVideo);
   };
 
+  console.log('Data loaded:', data);
+
   return (
     <>
       <h1 className="text-3xl font-bold text-center p-1 bg-blue-950 text-white">
