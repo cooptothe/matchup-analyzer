@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import useFetch from '@/hooks/useFetch';
 import { RowData } from '../../public/data/types';
 
-
 export default function Page() {
   const { fetchCsvData } = useFetch();
   const [data, setData] = useState<RowData[]>([]);
@@ -15,7 +14,6 @@ export default function Page() {
   const [outcome, setOutcome] = useState<string | null>(null);
   const [videoLink, setVideoLink] = useState<string | null>(null);
 
-
   useEffect(() => {
     fetchCsvData('/data/battedBallData.csv', (fetchedData) => {
       setData(fetchedData);
@@ -24,9 +22,8 @@ export default function Page() {
     });
   }, []);
 
-  // Format names to "First Last" 
   const formatName = (name: string) => {
-    if (!name.includes(',')) return name;
+    if (!name.includes(',')) return name; // fallback for already formatted names
     const [last, first] = name.split(',').map(s => s.trim());
     return `${first} ${last}`;
   };
@@ -37,6 +34,7 @@ export default function Page() {
     setSelectedPitcher(null);
     setOutcome(null);
     setVideoLink(null);
+
     const filtered = data.filter(row => row.BATTER === batter);
     const uniquePitchers = Array.from(new Set(filtered.map(row => row.PITCHER))).sort();
     setPitchers(uniquePitchers);
@@ -44,9 +42,11 @@ export default function Page() {
 
   const handlePitcherSelect = (pitcher: string) => {
     setSelectedPitcher(pitcher);
-    const subset = data.filter(row => row.BATTER === selectedBatter && row.PITCHER === pitcher);
-    const outcomeCounts: Record<string, number> = {};
+    const subset = data.filter(row => {
+      return row.BATTER === selectedBatter && row.PITCHER === pitcher;
+    });
 
+    const outcomeCounts: Record<string, number> = {};
     subset.forEach(row => {
       outcomeCounts[row.PLAY_OUTCOME] = (outcomeCounts[row.PLAY_OUTCOME] || 0) + 1;
     });
@@ -56,55 +56,78 @@ export default function Page() {
 
     const matchingVideo = subset.find(row => row.PLAY_OUTCOME === mostLikelyOutcome)?.VIDEO_LINK || null;
     setVideoLink(matchingVideo);
-    
   };
 
-  console.log(batters);
-
   return (
-    <div style={{ display: 'flex', padding: '1rem' }}>
-      {/* Batter List */}
-      <div style={{ width: '20%', overflowY: 'scroll', maxHeight: '90vh', paddingRight: '1rem' }}>
-        <h2>Batters</h2>
+
+    <div className="flex flex-col md:flex-row h-screen">
+      {/* Left panel: Batters */}
+      <div className="w-1/4 bg-gray-100 border-r border-gray-300 p-2 overflow-y-scroll">
+        <h2 className="text-lg font-semibold mb-4">Batters</h2>
         {batters.map(b => {
-          // Find the first row for this batter to get the unique BATTER_ID
           const batterRow = data.find(row => row.BATTER === b);
-          const batterId = batterRow?.BATTER_ID
+          const batterId = batterRow?.BATTER_ID;
           return (
-        <div key={batterId} onClick={() => handleBatterClick(b)} style={{ cursor: 'pointer', marginBottom: 4 }}>
-          {b}
-        </div>
+            <button
+            // make look like espn matchup analyzer
+              key={batterId}
+              onClick={() => handleBatterClick(b)}
+              className="w-full text-left p-2 mb-2 bg-white hover:bg-gray-200 rounded shadow-sm transition-colors"
+              style={{ fontFamily: 'Courier New, monospace' }}
+              title={`Batter ID: ${batterId}`}
+            >
+              {b}
+            </button>
           );
         })}
       </div>
 
-      {/* Matchup Analyzer */}
-      <div style={{ width: '80%' }}>
+      {/* Right panel: Matchup Details */}
+      <div className="w-1/2 p-6">
         {selectedBatter && (
           <>
-            <h2>{formatName(selectedBatter)}</h2>
-            <label>Select Pitcher:</label>
-            <select onChange={(e) => handlePitcherSelect(e.target.value)} value={selectedPitcher || ''}>
+            <h2 className="text-2xl font-bold mb-4">{formatName(selectedBatter)}</h2>
+
+            <label className="block mb-2 font-medium">Select Pitcher:</label>
+            <select
+              onChange={(e) => handlePitcherSelect(e.target.value)}
+              value={selectedPitcher || ''}
+              className="mb-4 p-2 border border-gray-300 rounded w-full"
+            >
               <option value="" disabled>Select a pitcher</option>
               {pitchers.map(p => {
-                // Find the first row for this pitcher to get the unique PITCHER_ID
                 const pitcherRow = data.find(row => row.PITCHER === p);
                 const pitcherId = pitcherRow?.PITCHER_ID;
-                if (!pitcherId) {
-                  return null; // Skip if no unique ID found
-              } return (
-                <option key={pitcherId} value={p}>{formatName(p)}</option>
-              )})}
+                if (!pitcherId) return null;
+                return (
+                  <option key={pitcherId} value={p}>{formatName(p)}</option>
+                );
+              })}
             </select>
 
             {outcome && (
-              <div style={{ marginTop: '1rem' }}>
-                <p><strong>Most Likely Outcome:</strong> {outcome}</p>
+              <div className="mt-6">
+                <p className="text-xl mb-2">
+                  <strong>Most Likely Outcome:</strong> {outcome}
+                </p>
+
                 {videoLink && (
-                  <div>
-                    <a href={videoLink} target="_blank" rel="noopener noreferrer">Watch Video</a>
-                    <br />
-                    <video key={videoLink} width="400" controls>
+                  <div className="space-y-2">
+                    <a
+                      href={videoLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 underline"
+                    >
+                      Watch Video in New Tab
+                    </a>
+
+                    <video
+                      key={videoLink}
+                      width="100%"
+                      controls
+                      className="rounded border shadow-md"
+                    >
                       <source src={videoLink} type="video/mp4" />
                       Your browser does not support the video tag.
                     </video>
