@@ -15,7 +15,7 @@ export default function Page() {
   const [videoLink, setVideoLink] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchCsvData('https://csv-batting-data.s3.us-east-2.amazonaws.com/BattedBallData.csv', (fetchedData) => {
+    fetchCsvData('/data/BattedBallData.csv', (fetchedData) => {
       setData(fetchedData);
       const uniqueBatters = Array.from(new Set(fetchedData.map(row => row.BATTER))).sort();
       setBatters(uniqueBatters);
