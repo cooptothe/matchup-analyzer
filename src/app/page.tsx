@@ -48,6 +48,7 @@ export default function Page() {
 
     const matchingVideo = subset.find(row => row.PLAY_OUTCOME === mostLikelyOutcome)?.VIDEO_LINK || null;
     setVideoLink(matchingVideo);
+    
   };
 
   console.log(batters);
@@ -55,26 +56,37 @@ export default function Page() {
   return (
     <div style={{ display: 'flex', padding: '1rem' }}>
       {/* Batter List */}
-      <div style={{ width: '30%', overflowY: 'scroll', maxHeight: '90vh', paddingRight: '1rem' }}>
+      <div style={{ width: '20%', overflowY: 'scroll', maxHeight: '90vh', paddingRight: '1rem' }}>
         <h2>Batters</h2>
-        {batters.map(b => (
-          <div key={b} onClick={() => handleBatterClick(b)} style={{ cursor: 'pointer', marginBottom: 4 }}>
-            {b}
-          </div>
-        ))}
+        {batters.map(b => {
+          // Find the first row for this batter to get the unique BATTER_ID
+          const batterRow = data.find(row => row.BATTER === b);
+          const batterId = batterRow?.BATTER_ID
+          return (
+        <div key={batterId} onClick={() => handleBatterClick(b)} style={{ cursor: 'pointer', marginBottom: 4 }}>
+          {b}
+        </div>
+          );
+        })}
       </div>
 
       {/* Matchup Analyzer */}
-      <div style={{ width: '70%' }}>
+      <div style={{ width: '80%' }}>
         {selectedBatter && (
           <>
             <h2>{selectedBatter}</h2>
             <label>Select Pitcher:</label>
             <select onChange={(e) => handlePitcherSelect(e.target.value)} value={selectedPitcher || ''}>
               <option value="" disabled>Select a pitcher</option>
-              {pitchers.map(p => (
-                <option key={p} value={p}>{p}</option>
-              ))}
+              {pitchers.map(p => {
+                // Find the first row for this pitcher to get the unique PITCHER_ID
+                const pitcherRow = data.find(row => row.PITCHER === p);
+                const pitcherId = pitcherRow?.PITCHER_ID;
+                if (!pitcherId) {
+                  return null; // Skip if no unique ID found
+              } return (
+                <option key={pitcherId} value={p}>{p}</option>
+              )})}
             </select>
 
             {outcome && (
