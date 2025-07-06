@@ -60,21 +60,43 @@ export default function Page() {
 
   return (
 
-    <div className="flex flex-col md:flex-row h-screen">
+    <div className="flex flex-col md:flex-row h-screen bg-gray-200">
       {/* Left panel: Batters */}
       <div className="w-1/4 bg-gray-100 border-r border-gray-300 p-2 overflow-y-scroll">
-        <h2 className="text-lg font-semibold mb-4">Batters</h2>
+        <h2 className="text-lg font-semibold mb-2">Batters</h2>
+        <p className="text-sm text-gray-600 mb-6">Select a batter to see matchup details</p>
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Search..."
+            className="w-full p-2 border border-gray-900 rounded"
+            onChange={(e) => {
+              const searchTerm = e.target.value.toLowerCase();
+              const filteredBatters = batters.filter(batter => {
+                const formattedBatter = batter.toLowerCase();
+                const [lastName, firstName] = formattedBatter.split(',').map(s => s.trim());
+                const fullName = `${firstName} ${lastName}`.toLowerCase();
+                return fullName.includes(searchTerm) ||
+                       formattedBatter.includes(searchTerm) ||
+                       `${lastName}, ${firstName}`.includes(searchTerm) ||
+                       `${firstName} ${lastName}`.includes(searchTerm);
+              });
+              setBatters(filteredBatters);
+              if (searchTerm === '') {
+                setBatters(Array.from(new Set(data.map(row => row.BATTER))).sort());
+              }
+
+            }}
+          />
+        </div>
         {batters.map(b => {
           const batterRow = data.find(row => row.BATTER === b);
           const batterId = batterRow?.BATTER_ID;
           return (
             <button
-            // make look like espn matchup analyzer
               key={batterId}
               onClick={() => handleBatterClick(b)}
               className="w-full text-left p-2 mb-2 bg-white hover:bg-gray-200 rounded shadow-sm transition-colors"
-              style={{ fontFamily: 'Courier New, monospace' }}
-              title={`Batter ID: ${batterId}`}
             >
               {b}
             </button>
@@ -92,7 +114,7 @@ export default function Page() {
             <select
               onChange={(e) => handlePitcherSelect(e.target.value)}
               value={selectedPitcher || ''}
-              className="mb-4 p-2 border border-gray-300 rounded w-full"
+              className="mb-4 p-2 border border-gray-900 rounded w-full"
             >
               <option value="" disabled>Select a pitcher</option>
               {pitchers.map(p => {
