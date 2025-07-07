@@ -163,19 +163,56 @@ export default function Page() {
                   )}
                   {/* style like dashboard */}
                   <div className="mt-4 p-4 bg-white rounded shadow-lg border border-gray-300">
-                    <h3 className="text-xl font-bold mb-4 border-b-2 border-red-700 pb-2 text-gray-900 tracking-wide" style={{ fontFamily: 'Arial Black, Arial, sans-serif', letterSpacing: '1px' }}>
+                    <h3
+                      className="text-xl font-bold mb-4 border-b-2 border-red-700 pb-2 text-gray-900 tracking-wide"
+                      style={{ fontFamily: 'Arial Black, Arial, sans-serif', letterSpacing: '1px' }}
+                    >
                       Matchup Statistics
                     </h3>
                     <div className="grid grid-cols-2 gap-4 text-base text-gray-800">
-                      <div>
-                        <p className="mb-2"><span className="font-semibold text-red-700">Total At Bats:</span> <span className="font-bold">{data.filter(row => row.BATTER === selectedBatter && row.PITCHER === selectedPitcher).length}</span></p>
-                        <p className="mb-2"><span className="font-semibold text-red-700">Avg. Launch Angle:</span> <span className="font-bold">{(data.reduce((sum, row) => sum + (row.LAUNCH_ANGLE || 0), 0) / data.length).toFixed(2)}°</span></p>
-                        <p className="mb-2"><span className="font-semibold text-red-700">Avg. Exit Speed:</span> <span className="font-bold">{(data.reduce((sum, row) => sum + (row.EXIT_SPEED || 0), 0) / data.length).toFixed(2)} mph</span></p>
-                      </div>
-                      <div>
-                        <p className="mb-2"><span className="font-semibold text-red-700">Avg. Exit Direction:</span> <span className="font-bold">{(data.reduce((sum, row) => sum + (row.EXIT_DIRECTION || 0), 0) / data.length).toFixed(2)}°</span></p>
-                        <p className="mb-2"><span className="font-semibold text-red-700">Avg. Hit Distance:</span> <span className="font-bold">{(data.reduce((sum, row) => sum + (row.HIT_DISTANCE || 0), 0) / data.length).toFixed(2)} ft</span></p>
-                      </div>
+                      {(() => {
+                        const matchupRows = data.filter(
+                          row => row.BATTER === selectedBatter && row.PITCHER === selectedPitcher
+                        );
+                        const count = matchupRows.length || 1;
+
+                        return (
+                          <>
+                            <div>
+                              <p className="mb-2">
+                                <span className="font-semibold text-red-700">Total At Bats:</span>
+                                <span className="font-bold">{matchupRows.length}</span>
+                              </p>
+                              <p className="mb-2">
+                                <span className="font-semibold text-red-700">Avg. Launch Angle:</span>
+                                <span className="font-bold">
+                                  {(matchupRows.reduce((sum, row) => sum + (row.LAUNCH_ANGLE || 0), 0) / count).toFixed(2)}°
+                                </span>
+                              </p>
+                              <p className="mb-2">
+                                <span className="font-semibold text-red-700">Avg. Exit Speed:</span>
+                                <span className="font-bold">
+                                  {(matchupRows.reduce((sum, row) => sum + (row.EXIT_SPEED || 0), 0) / count).toFixed(2)} mph
+                                </span>
+                              </p>
+                            </div>
+                            <div>
+                              <p className="mb-2">
+                                <span className="font-semibold text-red-700">Avg. Exit Direction:</span>
+                                <span className="font-bold">
+                                  {(matchupRows.reduce((sum, row) => sum + (row.EXIT_DIRECTION || 0), 0) / count).toFixed(2)}°
+                                </span>
+                              </p>
+                              <p className="mb-2">
+                                <span className="font-semibold text-red-700">Avg. Hit Distance:</span>
+                                <span className="font-bold">
+                                  {(matchupRows.reduce((sum, row) => sum + (row.HIT_DISTANCE || 0), 0) / count).toFixed(2)} ft
+                                </span>
+                              </p>
+                            </div>
+                          </>
+                        );
+                      })()}
                     </div>
                   </div>
                 </div>
