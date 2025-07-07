@@ -11,6 +11,7 @@ Built with **Next.js (TypeScript)**, **Tailwind CSS**,  and **PapaParse** for CS
 - 🔍 Select a **batter** from an alphabetized list
 - 🎯 Choose an opposing **pitcher**
 - 📈 View the **most likely play outcome** between the two
+- ➗ Display Avg. **batting statistics** of total at bats
 - 🎥 Watch actual **MLB video clips** from past matchups
 
 ---
